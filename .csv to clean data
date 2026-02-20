@@ -1,9 +1,21 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
 df = pd.read_csv('csv.csv')
-users = list(df.iloc[:, 7])
 
-for i in users :
-  i = i.replace("Test Passes for Participant: ", "")
-  print("\n" + str(i))
+print(f"Nume \t Numar Teme Necorectate \t Link")
+
+col5 = df.iloc[:, 5].tolist()
+col7 = df.iloc[:, 7].tolist()
+
+col7 = [i.replace("Test Passes for Participant: ", "") for i in col7]
+col5 = [i.replace(i, '''[xln url="'''+ i + '''"]Link[/xln]''') for i in col5]
+
+result = defaultdict(list)
+
+for k, v in zip(col7, col5):
+    result[k].append(v)
+
+for k, v in result.items():
+    print(f"{k} \t {len(v)} \t {' '.join(v)} ")
