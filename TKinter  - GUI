@@ -1,3 +1,5 @@
+# This branch is so that I can remove the "Browse" button after I use it and replace it with a select/copy button, to keep the GUI as minimalistic as possible.
+
 import tkinter as tk
 from tkinter import scrolledtext
 
