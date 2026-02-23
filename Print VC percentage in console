@@ -1,0 +1,16 @@
+import pandas as pd
+
+
+df = pd.read_csv("cv.csv")
+df = df.drop(columns=["Timestamp","Alte mentiuni"])
+df = df.dropna()
+df = df.replace("Nu", 0)
+df = df.replace("Da", 2)
+df = df.replace("Partial", 1)
+
+
+
+rows_as_lists = df.values.tolist()
+
+for i in rows_as_lists:
+  print(str(i[0]) + " are ca rezultate: " + str(i[1:]))
