@@ -1,62 +1,94 @@
-import pandas as pd
-import sys
-sys.path.append(r"C:\Users\popescu.victor\Desktop\NCA")
 import tkinter as tk
-from tkinter import filedialog
+import pandas as pd
 from tkinter import scrolledtext
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from collections import defaultdict
+
 
 root = tk.Tk()
 root.title("'Non Comissioned' Organizational Tools")
-root.geometry("400x300")
+root.geometry("800x600")
 
-text_box = scrolledtext.ScrolledText(root,width=1000,height=40,highlightthickness=2, highlightbackground="gray",wrap=tk.WORD)
-text_box.pack(padx=10, pady=10)
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=0)
 
+text_box = scrolledtext.ScrolledText(root,width=30,height=20,highlightthickness=2, highlightbackground="gray",wrap=tk.WORD)
+text_box.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 
-def main (file):
-  
-  df = pd.read_csv(file)
-  df = df.drop(columns=["Timestamp","Alte mentiuni"])
-  df = df.dropna()
-  df = df.replace("Nu", 0)
-  df = df.replace("Da", 2)
-  df = df.replace("Partial", 1)
-  megalist = []
+canvas1 = tk.Frame(root)
+canvas1.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
-  def row2list ():
-    rows_as_lists = df.values.tolist()
-    ratio = [1, 0.5, 1, 0.5, 2, 2, 1, 0.5, 1, 0.5]
-    print(len(ratio))
-    combined = 0
-    return rows_as_lists, ratio
-
-  def total_score ():
-    rows_as_lists, ratio = row2list()
-    for i in rows_as_lists:
-      combined = zip(ratio, i[1:])
-      combined = [x * y for (x, y) in combined]
-      
-      texted = (str(i[0]) + " TOTAL = " + str(sum(combined)))
-      print(texted)
-      
-      text_box.insert(tk.END, texted + "\n")
-
-
-
-  return total_score()
-
-
-
-def browse_file():
+def browse_analiza():
+    
     from tkinter import filedialog
-    file_path = filedialog.askopenfilename(title="Select a file", filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
-    if file_path:
-        print(main(file_path))
+    file = filedialog.askopenfilename(title="Select a file", filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+    #This part is for cleaning the data up before I do anything with it.
+    df = pd.read_csv(file)
+    df = df.drop(columns=["Timestamp","Alte mentiuni"])
+    df = df.dropna()
+    df = df.replace("Nu", 0)
+    df = df.replace("Da", 2)
+    df = df.replace("Partial", 1)
+    scor_deprinderi = [1, 0.5, 1, 0.5, 2, 2, 1, 0.5, 1, 0.5]
+    df["Total"] = df.iloc[:, 1:11].mul(scor_deprinderi).sum(axis=1)
+    avg_table = (df.groupby(df.columns[0], as_index=False)["Total"].mean())
+    avg_table["Total"] = avg_table["Total"] * 5
+    for _, row in avg_table.iterrows():
+        text_box.insert(tk.END, f"{row['Nume Tutore']}: {round(row['Total'])}%\n")
+
+    fig = Figure(figsize=(6, 4))
+    ax = fig.add_subplot(111)
+    ax.barh(avg_table["Nume Tutore"], avg_table["Total"])
+    ax.set_xlabel("Total")
+
+    chart = FigureCanvasTkAgg(fig, master=canvas1)
+    chart.draw()
+    chart.get_tk_widget().pack(fill="both", expand=True)
 
 
+def browse_hw():
+    from tkinter import filedialog
+    file = filedialog.askopenfilename(title="Select a file", filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+    
+    df = pd.read_csv(file)
+    hw_link = df.iloc[:, 5].tolist()
+    student_username = df.iloc[:, 7].tolist()
+    counts = df.iloc[:, 7].value_counts()
 
-browse = tk.Button(root, text="Browse File", command=browse_file)
-browse.pack(pady=10)
+
+    student_username = [i.replace("Test Passes for Participant: ", "") for i in student_username]
+    hw_link = [i.replace(i, '''[xln url="'''+ i + '''"]Link[/xln]''') for i in hw_link]
+
+    
+    result = defaultdict(list)
+
+    for k, v in zip(student_username, hw_link):
+        result[k].append(v)
+
+    output_final = ["Nume\tNumar Teme Necorectate\tLinkuri"]
+    for k, v in result.items():
+        output_final.append(f"{k} are {len(v)} teme necorectate: {' '.join(v)} ")
+
+    text_box.insert(tk.END, "\n".join(output_final))
+    
+    fig, ax = plt.subplots()
+    labels_rem = [label.replace("Test Passes for Participant:", "") for label in counts.index]
+    ax.pie(counts.values, labels=labels_rem, autopct='%1.1f%%')
+    ax.set_title("Procentant Cursant din Total")
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+    canvas.get_tk_widget().grid(row=0, column=0)
+
+
+btn1 = tk.Button(root, text="Formatare Teme", command=browse_hw)
+btn1.grid(row=1, column=0, sticky="ew", padx=10, pady=10)
+
+btn2 = tk.Button(root, text="Analiza Clase Virtuale", command=browse_analiza)
+btn2.grid(row=1, column=1, sticky="ew", padx=10, pady=10)
 
 
 root.mainloop()
