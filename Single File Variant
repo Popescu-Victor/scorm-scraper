@@ -6,6 +6,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import defaultdict
 
+# This section is for creating the GUI with Tkinter 
 
 root = tk.Tk()
 root.title("'Non Comissioned' Organizational Tools")
@@ -22,6 +23,7 @@ text_box.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 canvas1 = tk.Frame(root)
 canvas1.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
+# This function cleans data from the reports related to teacher performance during online classes and then return the average performance over the course of a semester both as text and as a bar chart.
 def browse_analiza():
     
     from tkinter import filedialog
@@ -49,7 +51,7 @@ def browse_analiza():
     chart.draw()
     chart.get_tk_widget().pack(fill="both", expand=True)
 
-
+# This function cleans data related to student's non graded homework and returns two things: a pie chart to beter visualize which of the teachers is falling behind on grading homework and a text that can be pasted into ILIAS that returns links to these grading tasks.
 def browse_hw():
     from tkinter import filedialog
     file = filedialog.askopenfilename(title="Select a file", filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
