@@ -61,9 +61,10 @@ def browse_hw():
     student_username = df.iloc[:, 7].tolist()
     counts = df.iloc[:, 7].value_counts()
 
+# This section might be a bit confusing for someone that has never used the ILIAS LMS. This does two things: First, it removes the part that automatically comes with the scraped username section in homework areas 'Test Passes for Participant' (The word "test" here refers to both tests and regular homework). Secondly, it provides teachers a link to the assignments that are still to be graded instead of just telling them which exercises those are.
 
     student_username = [i.replace("Test Passes for Participant: ", "") for i in student_username]
-    hw_link = [i.replace(i, '''[xln url="'''+ i + '''"]Link[/xln]''') for i in hw_link]
+    hw_link = [i.replace(i, '''[xln url="'''+ i + '''"]Link[/xln]''') for i in hw_link] # The temp variable 'i' here is the link to the ungraded assignment.
 
     
     result = defaultdict(list)
