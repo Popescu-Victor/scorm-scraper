@@ -26,7 +26,7 @@ def main (file):
 
   def row2list ():
     rows_as_lists = df.values.tolist()
-    ratio = [1, 0.5, 1, 0.5, 2, 2, 1, 0.5, 1, 0.5]
+    ratio = [1, 0.5, 1, 0.5, 2, 2, 1, 0.5, 1, 0.5] # As I've exmplained in the 'Tkinter - GUI' file, these ratios are based on the original guidelines for teacher performance during online classes. Certain criteria are worth more than others towards the toal score.
     print(len(ratio))
     combined = 0
     return rows_as_lists, ratio
@@ -34,7 +34,7 @@ def main (file):
   def total_score ():
     rows_as_lists, ratio = row2list()
     for i in rows_as_lists:
-      combined = zip(ratio, i[1:])
+      combined = zip(ratio, i[1:]) # And this is where the ratio variable is used to modify how much certain criteria count towards the final score.
       combined = [x * y for (x, y) in combined]
       
       texted = (str(i[0]) + " TOTAL = " + str(sum(combined)))
