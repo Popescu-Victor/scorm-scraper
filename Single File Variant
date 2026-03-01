@@ -12,6 +12,7 @@ root = tk.Tk()
 root.title("'Non Comissioned' Organizational Tools")
 root.geometry("800x600")
 
+# The layout is as follows: four sections, the two on top being much taller and meant for displays the the two on the bottom for the buttons.
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 root.rowconfigure(0, weight=1)
