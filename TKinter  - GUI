@@ -5,18 +5,14 @@ root = tk.Tk()
 root.title("'Non Comissioned' Organizational Tools")
 root.resizable(False, False)
 
-# Variable to store selected value
 choice = tk.StringVar(root)
-choice.set("Virtual Classroom Analyser")  # default value
+choice.set("Virtual Classroom Analyser") 
 
-# Options
 tools = ["Virtual Classroom Analyser", "Scraper → SCORM Code"]
 
-# Create OptionMenu
 dropdown = tk.OptionMenu(root, choice, *tools)
 dropdown.pack(padx=20, pady=20)
 
-# Button to read value
 
 def browse_file():
     from tkinter import filedialog
