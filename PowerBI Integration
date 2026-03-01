@@ -1,0 +1,11 @@
+import requests
+
+# Experimenting with Power BI integration.
+
+access_token = "<ACCESS_TOKEN>"
+header = {"Authorization": f"Bearer {token}"}
+
+workspace_id = "<WORKSPACE_ID>"
+url = f"https://api.powerbi.com/v1.0/myorg/groups/{workspace_id}/datasets"
+response = requests.get(url, headers=headers)
+print(response.json())
