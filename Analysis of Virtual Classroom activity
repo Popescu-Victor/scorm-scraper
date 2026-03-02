@@ -22,13 +22,12 @@ def main (file):
   df = df.replace("Nu", 0)
   df = df.replace("Da", 2)
   df = df.replace("Partial", 1)
-  megalist = []
+
 
   def row2list ():
     rows_as_lists = df.values.tolist()
     ratio = [1, 0.5, 1, 0.5, 2, 2, 1, 0.5, 1, 0.5] # As I've exmplained in the 'Tkinter - GUI' file, these ratios are based on the original guidelines for teacher performance during online classes. Certain criteria are worth more than others towards the toal score.
     print(len(ratio))
-    combined = 0
     return rows_as_lists, ratio
 
   def total_score ():
