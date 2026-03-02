@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import defaultdict
+import sqlite3
+
+
+cursor_vc = sqlite3.connect('virtual_classroom.db')
+cursor_hw = sqlite3.connect('homework.db')
 
 # This section is for creating the GUI with Tkinter 
 
