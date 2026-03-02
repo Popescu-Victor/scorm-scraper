@@ -7,9 +7,10 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import defaultdict
 import sqlite3
 
+database = sqlite3.connect()
+curs = connect.cursor()
 
-cursor_vc = sqlite3.connect('virtual_classroom.db')
-cursor_hw = sqlite3.connect('homework.db')
+curs.execute(''' CREATE TABLE hw_clean (username, links) ''')
 
 # This section is for creating the GUI with Tkinter 
 
@@ -71,7 +72,7 @@ def browse_hw():
 
     student_username = [i.replace("Test Passes for Participant: ", "") for i in student_username]
     hw_link = [i.replace(i, '''[xln url="'''+ i + '''"]Link[/xln]''') for i in hw_link] # The temp variable 'i' here is the link to the ungraded assignment.
-
+    curs.commit()
     
     result = defaultdict(list)
 
