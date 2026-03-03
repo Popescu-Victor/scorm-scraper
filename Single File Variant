@@ -7,7 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import defaultdict
 import sqlite3
 
-database = sqlite3.connect()
+database = sqlite3.connect('database.db')
 curs = database.cursor()
 
 curs.execute(''' CREATE TABLE hw_clean (username, links) ''')
